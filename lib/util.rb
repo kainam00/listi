@@ -8,9 +8,25 @@ def get_name(instance)
 	end
 end
 
-
 def output(reservations, outputargs=nil)
-  reservations.each do |reservation|
-    puts get_name(reservation.instances[0])+ ',' + reservation.instances[0].private_ip_address
+  if outputargs.has_key?("batch")
+    output = Array.new()
+    if outputargs.has_key?("num")
+      reservations.each do |reservation|
+        if outputargs["num"] > 0
+          output << reservation.instances[0].private_ip_address
+          outputargs["num"] = outputargs["num"] - 1
+        end
+      end
+    else
+      reservations.each do |reservation|
+        output << reservation.instances[0].private_ip_address
+      end
+    end
+    puts output.join(",")
+  else
+    reservations.each do |reservation|
+      puts get_name(reservation.instances[0]) + ',' + reservation.instances[0].private_ip_address
+    end
   end
 end

@@ -8,11 +8,14 @@ require './lib/util.rb'
 # Check args
 opts = GetoptLong.new(
   [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
-  [ '--profile', '-p', GetoptLong::REQUIRED_ARGUMENT ]
+  [ '--profile', '-p', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--batch', '-b', GetoptLong::NO_ARGUMENT ],
+  [ '--num', '-n', GetoptLong::REQUIRED_ARGUMENT ]
 )
 
 config = ''
 repetitions = 1
+@outputargs = Hash.new()
 opts.each do |opt, arg|
   case opt
     when '--help'
@@ -26,12 +29,19 @@ Where OPTIONS are:
   NOTE: Use the value of "role" if you're running this on an EC2 instance and want to simply use it's role.
    Name of the AWS CLI profile you want to use (the one created by the AWS cli configure command and stored in the .aws directory in you home dir)
 
+--batch
+  Batch mode, will output in comma separated format with no hostnames
+
 FILTER
   What to search for in the Name tag
       EOF
       exit 0
     when '--profile'
       @profile = arg
+    when '--batch'
+      @outputargs = @outputargs.merge("batch"=>true)
+    when '--num'
+      @outputargs = @outputargs.merge("num"=> arg.to_i)
   end
 end
 
@@ -66,4 +76,4 @@ resp = ec2.describe_instances({
 		    }
 		  ],
 })
-output(resp.reservations)
+output(resp.reservations, @outputargs)
