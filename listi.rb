@@ -2,8 +2,8 @@
 require 'aws-sdk'
 require 'yaml'
 require 'getoptlong'
-require './lib/aws-profile.rb'
-require './lib/util.rb'
+require_relative 'lib/aws-profile'
+require_relative 'lib/util'
 
 # Check args
 opts = GetoptLong.new(
