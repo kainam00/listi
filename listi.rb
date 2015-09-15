@@ -46,7 +46,7 @@ FILTER
 end
 
 if ARGV.length != 1
-  puts "Missing source or destination args. Try running --help"
+  puts "Missing filter arguement. Try running --help"
   exit 0
 end
 
